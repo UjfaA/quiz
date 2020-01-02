@@ -11,10 +11,12 @@
 	<div> 
 		<h2>Dobrodošli ${sessionScope.userFirstName}</h2>
 	</div>
-	<div>
+	<form action="/users" method="get">
+		<input type="submit" value="Pregled korisničkih naloga"/>
+	</form>
+	<form action="/questions" method="get">
+		<input type="submit" value="Pregeled pitanja kiza"/>
+	</form>
 		<button type="button"> Click Me!</button>
-		<button type="button"> Click Me!</button>
-		<button type="button"> Click Me!</button>
-	</div>
 </body>
 </html>

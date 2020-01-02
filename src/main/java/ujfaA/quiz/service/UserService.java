@@ -18,10 +18,6 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepo;
 	
-	public User save(User user) {
-		return userRepo.save(user);
-	}
-	
 	public List<User> listAll() {
 		List<User> list = new ArrayList<User>();
 		userRepo.findAll().forEach(list::add);
@@ -30,6 +26,10 @@ public class UserService {
 	
 	public Optional<User> getUser(String username) {
 		return userRepo.findByUsername(username);
+	}
+	
+	public User save(User user) {
+		return userRepo.save(user);
 	}
 	
 	public void deleteUser(String username) {

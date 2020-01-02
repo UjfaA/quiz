@@ -29,7 +29,7 @@
 				</tr>
 				<tr>
 					<td>email:</td>
-					<td><form:input path="email"/></td>
+					<td><form:input type="email" path="email"/></td>
 				</tr>
 				<tr>
 					<td>Korisničko ime:</td>

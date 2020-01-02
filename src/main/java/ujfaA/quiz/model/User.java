@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +32,7 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastActive;
 	
 	public Boolean isAdministrator() {

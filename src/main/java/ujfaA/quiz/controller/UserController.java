@@ -61,7 +61,7 @@ public class UserController {
 			user = userService.getUser(username).orElseThrow();			
 		} catch (Exception e) {
 			model.addAttribute("username", username);
-			model.addAttribute("message", "Nepostojeće korisničko ime");
+			model.addAttribute("message", "Nepostojeće korisničko ime.");
 			return "login";
 		}
 		if ( ! password.contentEquals(user.getPassword()) ) {
@@ -78,17 +78,37 @@ public class UserController {
 			return "redirect:/quizStart";
 	}
 	
+
 	@GetMapping("/loginSuccess")
-	public String loginSuccess() {
+	public String loginSuccess(HttpSession session, ModelMap model) {
+		
+		Long userId = (Long) session.getAttribute("userId");
+		if (userId == null) {
+			model.addAttribute("message", "Morate biti ulogovani da bi pristupili ovoj stranici.");
+			return "denied";
+		}
+		
+		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
+		if (userIsAdmin.equals(Boolean.FALSE)) {
+			return "redirect:/quizstart";
+		}
+		
 		return "loginsuccess";
 	}
 	
-//  only if logged in as admin	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		System.out.println("logged out");
+		return "index";
+	}
+	
 	@GetMapping("/users")
 	public String listAllUsers(HttpSession session, ModelMap model) {
 		
 		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
 		if (userIsAdmin == null || userIsAdmin.equals(Boolean.FALSE)) {
+			model.addAttribute("message", "Morate biti ulogovani sa administratorskim nalogom da biste pristupili ovoj stranici.");
 			return "denied";
 		}
 		model.addAttribute("usersList", userService.listAll());

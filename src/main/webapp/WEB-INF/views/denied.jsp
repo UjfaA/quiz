@@ -9,7 +9,7 @@
 <body>
 	<div>
 	<h2>Pristup onemogućen</h2>
-	<h5>Morate biti ulogovani sa administratorskim nalogom da biste pristupili ovoj stranici </h5>
+	<h5>${message}</h5>
 	<p><a href="/"> početak</a></p>
 	</div>
 </body>
