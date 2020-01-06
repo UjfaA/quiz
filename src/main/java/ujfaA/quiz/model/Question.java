@@ -1,11 +1,17 @@
 package ujfaA.quiz.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
@@ -13,25 +19,38 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.lang.NonNull;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+
 @Entity
-@Table(name="questions")
-public class Question {
+@Table(name="QUESTIONS")
+@Getter @Setter
+public class Question{
 	
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NonNull
 	private String questionText;
-	@NonNull
 	private String correctAnswer;
-	// Useful for JSP form
 	@Transient
 	private int correctAnswerIndex;
-	@NotEmpty
 	private ArrayList<String> answers;
+	
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "QUESTIONS_ANSWERED_BY_USER",
+			joinColumns = @JoinColumn(name = "QUESTION_ID", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName="id")
+	)
+	private Set<User> usersAnswered = new HashSet<User>();
+	
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "QUESTIONS_ANSWERED_CORRECTLY_BY_USER", 
+			joinColumns = @JoinColumn(name = "QUESTION_ID", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName="id")
+	)
+	private Set<User> usersAnsweredCorectly = new HashSet<User>();
 	
 	public Question() {
 	}
@@ -42,5 +61,10 @@ public class Question {
 		this.questionText	= questionText;
 		this.correctAnswer	= answers.get(0);
 		this.answers		= answers;
+	}
+	
+	@Override
+	public String toString() {
+		return questionText;
 	}
 }

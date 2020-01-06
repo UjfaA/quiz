@@ -32,19 +32,19 @@ public class UserController {
 	public String addNewUser(@ModelAttribute("user") 	User newUser,
 														ModelMap model,
 														HttpSession session) {
-		Optional<User> userInDb = userService.getUser(newUser.getUsername());
-		if (userInDb.isPresent()) {
+		try {
+			User userInDb = userService.getUser(newUser.getUsername());			
+		} catch (Exception e) {
+			model.addAttribute("user", newUser);
 			model.addAttribute("message", "Korisničko ime je zauzeto.\nProbajte drugo korisničko ime.");
 			return "registration";
 		}
 		newUser = userService.save(newUser);
 		session.setAttribute("userId", newUser.getId());
+		session.setAttribute("username", newUser.getUsername());
 		session.setAttribute("userFirstName", newUser.getFirstName());
 		session.setAttribute("administrator", newUser.isAdministrator());
-		if (newUser.isAdministrator())
-			return "redirect:/loginSuccess";
-		else
-			return "redirect:/quizStart";
+		return "redirect:/loginSuccess";
 	}
 	
 	@GetMapping("/login")
@@ -58,7 +58,7 @@ public class UserController {
 						HttpSession session, ModelMap model) {
 		User user;
 		try {
-			user = userService.getUser(username).orElseThrow();			
+			user = userService.getUser(username);			
 		} catch (Exception e) {
 			model.addAttribute("username", username);
 			model.addAttribute("message", "Nepostojeće korisničko ime.");
@@ -69,13 +69,12 @@ public class UserController {
 			model.addAttribute("message", "Pogrešna lozinka.");
 			return "login"; 
 		}
+		
 		session.setAttribute("userId", user.getId());
+		session.setAttribute("username", user.getUsername());
 		session.setAttribute("userFirstName", user.getFirstName());
 		session.setAttribute("administrator", user.isAdministrator());
-		if (user.isAdministrator())
 			return "redirect:/loginSuccess";
-		else
-			return "redirect:/quizStart";
 	}
 	
 
@@ -84,13 +83,13 @@ public class UserController {
 		
 		Long userId = (Long) session.getAttribute("userId");
 		if (userId == null) {
-			model.addAttribute("message", "Morate biti ulogovani da bi pristupili ovoj stranici.");
+			model.addAttribute("message", "Morate biti ulogovani da biste pristupili ovoj stranici.");
 			return "denied";
 		}
 		
 		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
 		if (userIsAdmin.equals(Boolean.FALSE)) {
-			return "redirect:/quizstart";
+			return "redirect:/quizStart";
 		}
 		
 		return "loginsuccess";
@@ -99,8 +98,7 @@ public class UserController {
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
-		System.out.println("logged out");
-		return "index";
+		return "redirect:/";
 	}
 	
 	@GetMapping("/users")

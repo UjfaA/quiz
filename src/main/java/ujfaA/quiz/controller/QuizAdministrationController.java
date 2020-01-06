@@ -15,12 +15,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import ujfaA.quiz.model.Question;
 import ujfaA.quiz.service.QuestionService;
+import ujfaA.quiz.service.QuizService;
+import ujfaA.quiz.service.UserService;
 
 @Controller
 public class QuizAdministrationController {
 	
 	@Autowired
 	private QuestionService questionService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private QuizService quizService;
 	
 	@GetMapping("/questions")
 	public String getQuestions( HttpSession session, ModelMap model) {
@@ -84,4 +90,33 @@ public class QuizAdministrationController {
 		questionService.delete(id);
 		return "redirect:/questions";
 	}
+	
+	@GetMapping("/userStats")
+	public String showStats(HttpSession session, ModelMap model,
+							@RequestParam( name = "selected", defaultValue = "0") Integer selected,
+							@RequestParam( name = "answeredCorrectly", defaultValue = "false") boolean answeredCorrectly) {
+		
+		quizService.getUsersThatAnsweredAll(false);
+		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
+		if (userIsAdmin == null || userIsAdmin.equals(Boolean.FALSE)) {
+			model.addAttribute("message", "Morate biti ulogovani da bi pristupili ovoj stranici.");
+			return "denied";
+		}
+		
+		List<String> avaibleStats = this.getAvaibleStatsForUser();
+		
+		model.addAttribute("avaibleStats", avaibleStats);
+		model.addAttribute("selected", selected);
+		model.addAttribute("usernames", quizService.getUsersThatAnsweredAll(true));
+		return "userstats";
+	}
+
+	private List<String> getAvaibleStatsForUser() {
+		List<String> avaibleStats = new ArrayList<String>();
+		avaibleStats.add("sva pitanja");
+		avaibleStats.addAll(questionService.GetQuestionsText());
+		System.out.println(avaibleStats);
+		return avaibleStats;
+	}
+	
 }
