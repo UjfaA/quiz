@@ -14,11 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotEmpty;
 
-import org.springframework.lang.NonNull;
-
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -54,17 +50,39 @@ public class Question{
 	
 	public Question() {
 	}
-
-	/**
-	 * @param answers - Must not be null nor empty. Answer at index 0 is chosen as correct */
-	public Question(@NonNull String questionText, @NotEmpty ArrayList<String> answers) {
-		this.questionText	= questionText;
-		this.correctAnswer	= answers.get(0);
-		this.answers		= answers;
+	
+	public void removeFromUsersAnswered(User u) {
+		this.getUsersAnswered().remove(u);
+		u.getAnsweredQuestions().remove(this);
+	}
+	
+	public void removeFromUsersAnsweredCorectly(User u) {
+		this.getUsersAnsweredCorectly().remove(u);
+		u.getCorrectlyAnsweredQuestions().remove(this);
+	}
+	
+	public double getCorrectnesstPercent() {
+		if (usersAnswered.size() == 0) 
+			return 0;
+		else
+			return (usersAnsweredCorectly.size() * 1.0) / usersAnswered.size();
 	}
 	
 	@Override
 	public String toString() {
 		return questionText;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if ( ! (other instanceof Question))
+			return false;
+		Question otherQ = (Question) other;
+		return this.questionText.equals(otherQ.questionText);
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.questionText.hashCode();
 	}
 }

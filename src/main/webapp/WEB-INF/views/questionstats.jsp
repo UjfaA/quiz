@@ -5,9 +5,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>TP Kviz - statistika kviza</title>
+<title>TP Kviz - statistika pitanja</title>
 </head>
 <body>
+	<div align="center"> nalog: ${sessionScope.username}</div>
+	<div align="center"> <a href="/logout"> logout </a></div>
 	<div align="center">
 		<h2 align="center"> Statistika kviza </h2>
 		<form action="/quizStats" method="get">
@@ -17,5 +19,7 @@
 			<input type="submit" value="Osveži prikaz"/>
 		</form>
 	</div>
+		<hr/>
+	<div align="center"> <a href="/loginSuccess"> Povratak na početak </a></div>
 </body>
 </html>

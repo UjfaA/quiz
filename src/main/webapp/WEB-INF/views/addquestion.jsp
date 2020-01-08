@@ -10,7 +10,9 @@
 <title>Novo pitanje</title>
 </head>
 <body>
-<div align="center">
+	<div align="center"> nalog: ${sessionScope.username}</div>
+	<div align="center"> <a href="/logout"> logout </a></div>
+	<div align="center">
 		<form:form action="/questions" method="POST"  modelAttribute="question">
 			<table>
 			<thead>
@@ -41,6 +43,8 @@
 			</tbody>
 			</table>
 		</form:form>
-</div>
+	</div>
+	<hr/>
+<div align="center"> <a href="/loginSuccess"> Povratak na početak </a></div>
 </body>
 </html>

@@ -5,13 +5,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Kviz</title>
+<title>TP Kviz - TP Kviz</title>
 </head>
 <body>
-<div align="right"> nalog: ${sessionScope.username}</div>
 <table>
  <tr> 
- 	<th>Pitanje "${qindex+1} od ${numberOfQuestions}"</th>
+ 	<th>Pitanje "${qIndex+1} od ${numberOfQuestions}"</th>
  </tr>
  <tr>
  <td></td>
@@ -22,18 +21,20 @@
 		<fieldset>
 			<legend> "${question.questionText}"</legend>
 			<c:forEach items="${question.answers}" var="answer" varStatus="varstatus">
-			<input type="hidden" name="qindex" value="${qindex}"/>
+			<input type="hidden" name="qIndex" value="${qIndex}"/>
 			<input type="checkbox" name="checked"  value="${answer}" id ="c${varstatus.count}"/>
 			<label for="c${varstatus.count}">${answer}</label>
 			<br/>
 			</c:forEach>
 		</fieldset>
-		<input type="submit"/>
+		<input type="submit" value = "Potvrdi odgovor"/>
 	</form>
 	<form action="/skipQuestion" method="get">
-		<input type="hidden" name="qindex" value="${qindex}"/>
+		<input type="hidden" name="qIndex" value="${qIndex}"/>
 		<input type="submit" value="Preskoči pitanje"/>
 	</form>
 </div>
+<hr>
+<div align="left"> <a href="/abandon"> Napusti Kviz </a></div>
 </body>
 </html>

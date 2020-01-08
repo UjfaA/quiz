@@ -5,12 +5,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Quiz competed</title>
+<title>TP Kviz - rezultat</title>
 </head>
 <body>
+<div align="center"> nalog: ${sessionScope.username}</div>
+<div align="center"> <a href="/logout"> logout </a></div>
 <div align="center">
 	<c:forEach items="${messages}" var="message">
-	<h3> "${message}"</h3>
+	<h3> ${message}</h3>
 	</c:forEach>
 	<hr/>
 	<h4> RANG LISTA: </h4>
@@ -31,5 +33,7 @@
 	</tbody>
 	</table>
 </div>
+<hr/>
+<div align="center"> <a href="/loginSuccess"> Povratak na početak </a></div>
 </body>
 </html>

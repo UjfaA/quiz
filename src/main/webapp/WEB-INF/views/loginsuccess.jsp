@@ -5,15 +5,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Login Success</title>
+<title>TP Kviz - admin</title>
 </head>
 <body>
+	<div align="center"> nalog: ${sessionScope.username}</div>
+	<div align="center"> <a href="/logout"> logout </a></div>
 	<div align="center"> 
 		<h2>Dobrodošli ${sessionScope.userFirstName}</h2>
 	</div>
 	<div align="center">
-		<form action="/showQuestion" method="get">
-			<input type="hidden" name = "qindex" value = "0"/> 
+		<form action="/resetAndStart" method="get">
+			<input type="hidden" name = "qIndex" value = "0"/> 
 			<input type="submit" value="Startuj kviz" />
 		</form>
 	</div>
@@ -26,18 +28,35 @@
 			<input type="submit" value="Pregled korisničkih naloga"/>
 		</form>
 		</td>
+		</tr>
+		<tr>
 		<td>
 		<form action="/questions" method="get">
-			<input type="submit" value="Pregeled pitanja kviza"/>
+			<input type="submit" value="Pregled pitanja kviza"/>
+		 -- dodavanje i brisanje pitanja
 		</form>
 		</td>
+		</tr>
+		<tr>
 		<td>
 		<form action="/userStats" method="get">
 			<input type="submit" value="Pregled statistike kviza"/>
+		-- ispis učesnika koji su odgovorili(tačno) na sva pitanja (/pitanje) 
 		</form>
 		</td>
+		</tr>
+		<tr>
 		<td>
-		<button type="button"> Click Me!</button>
+		<form action="/userStats/rankings" method="get">
+			<input type="submit" value="Pregled uspešnosti učesnika"/>
+		</form>
+		</td>
+		</tr>
+		<tr>
+		<td>
+		<form action="/questionStats/rankings" method="get">
+			<input type="submit" value="Pregled pitanja po procentu tačnih odgovora"/>
+		</form>
 		</td>
 		</tr>
 	</table>

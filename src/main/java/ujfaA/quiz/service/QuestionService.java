@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ujfaA.quiz.model.Question;
+import ujfaA.quiz.model.User;
 import ujfaA.quiz.repository.QuestionRepository;
 
 @Service
@@ -52,9 +53,14 @@ public class QuestionService {
 	}
 	
 	public Collection<String> GetQuestionsText() {
-		Collection<String> ccc = questionRepo.findAllquestionTexts();
-		System.out.println(ccc);
-		return ccc;
+		return questionRepo.findAllquestionTexts();
+	}
+	
+	public Set<User> getUsersAnswered(String questionText, boolean answeredCorrectly) {
+		if (answeredCorrectly)
+			return questionRepo.getUsersThatAnsweredQuestionCorrectly(questionText);
+		else
+			return questionRepo.getUsersThatAnsweredQuestion(questionText);
 	}
 	
 	//
@@ -63,5 +69,14 @@ public class QuestionService {
 		set.add(getQuestionByIndex(0));
 		set.add(getQuestionByIndex(1));		
 		return set;
+	}
+
+	public List<Question> listAllOrderedByCorrectnes() {
+		List<Question> questions = this.listAll();
+		questions.sort((q1, q2) -> {
+			return Double.compare(	q2.getCorrectnesstPercent(),
+									q1.getCorrectnesstPercent());
+		});
+		return questions;
 	}
 }

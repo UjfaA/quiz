@@ -2,6 +2,7 @@ package ujfaA.quiz.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ujfaA.quiz.model.Question;
+import ujfaA.quiz.model.User;
 import ujfaA.quiz.service.QuestionService;
 import ujfaA.quiz.service.QuizService;
 import ujfaA.quiz.service.UserService;
@@ -24,7 +26,7 @@ public class QuizAdministrationController {
 	@Autowired
 	private QuestionService questionService;
 	@Autowired
-	private UserService userService;
+	private UserService userservice;
 	@Autowired
 	private QuizService quizService;
 	
@@ -33,7 +35,7 @@ public class QuizAdministrationController {
 		
 		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
 		if (userIsAdmin == null || userIsAdmin.equals(Boolean.FALSE)) {
-			model.addAttribute("message", "Morate biti ulogovani da bi pristupili ovoj stranici.");
+			model.addAttribute("message", "Morate biti ulogovani da biste pristupili ovoj stranici.");
 			return "denied";
 		}
 		model.addAttribute("options", this.getOptions());
@@ -56,7 +58,7 @@ public class QuizAdministrationController {
 		
 		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
 		if (userIsAdmin == null || userIsAdmin.equals(Boolean.FALSE)) {
-			model.addAttribute("message", "Morate biti ulogovani da bi pristupili ovoj stranici.");
+			model.addAttribute("message", "Morate biti ulogovani da biste pristupili ovoj stranici.");
 			return "denied";
 		}
 		questionService.save(question);
@@ -69,7 +71,7 @@ public class QuizAdministrationController {
 		
 		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
 		if (userIsAdmin == null || userIsAdmin.equals(Boolean.FALSE)) {
-			model.addAttribute("message", "Morate biti ulogovani da bi pristupili ovoj stranici.");
+			model.addAttribute("message", "Morate biti ulogovani da biste pristupili ovoj stranici.");
 			return "denied";
 		}
 		session.setAttribute("previouslySelectedOption", numberOfAnswers);
@@ -84,7 +86,7 @@ public class QuizAdministrationController {
 		
 		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
 		if (userIsAdmin == null || userIsAdmin.equals(Boolean.FALSE)) {
-			model.addAttribute("message", "Morate biti ulogovani da bi pristupili ovoj stranici.");
+			model.addAttribute("message", "Morate biti ulogovani da biste pristupili ovoj stranici.");
 			return "denied";
 		}
 		questionService.delete(id);
@@ -94,29 +96,59 @@ public class QuizAdministrationController {
 	@GetMapping("/userStats")
 	public String showStats(HttpSession session, ModelMap model,
 							@RequestParam( name = "selected", defaultValue = "0") Integer selected,
-							@RequestParam( name = "answeredCorrectly", defaultValue = "false") boolean answeredCorrectly) {
+							@RequestParam( name = "answeredCorrectly", defaultValue = "false") Boolean answeredCorrectly) {
 		
-		quizService.getUsersThatAnsweredAll(false);
 		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
 		if (userIsAdmin == null || userIsAdmin.equals(Boolean.FALSE)) {
-			model.addAttribute("message", "Morate biti ulogovani da bi pristupili ovoj stranici.");
+			model.addAttribute("message", "Morate biti ulogovani da biste pristupili ovoj stranici.");
 			return "denied";
 		}
 		
 		List<String> avaibleStats = this.getAvaibleStatsForUser();
+		Set<String> usernames = quizService.collectUsernames(avaibleStats, selected, answeredCorrectly);
 		
 		model.addAttribute("avaibleStats", avaibleStats);
+		model.addAttribute("checked", answeredCorrectly);
 		model.addAttribute("selected", selected);
-		model.addAttribute("usernames", quizService.getUsersThatAnsweredAll(true));
+		model.addAttribute("usernames", usernames);
 		return "userstats";
 	}
 
 	private List<String> getAvaibleStatsForUser() {
+		
 		List<String> avaibleStats = new ArrayList<String>();
 		avaibleStats.add("sva pitanja");
 		avaibleStats.addAll(questionService.GetQuestionsText());
-		System.out.println(avaibleStats);
 		return avaibleStats;
 	}
 	
+	@GetMapping("userStats/rankings")
+	public String getRankings(HttpSession session, ModelMap model) {
+		
+		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
+		if (userIsAdmin == null || userIsAdmin.equals(Boolean.FALSE)) {
+			model.addAttribute("message", "Morate biti ulogovani da biste pristupili ovoj stranici.");
+			return "denied";
+		}
+		
+		List<User> rankings = userservice.getHighestRanked();
+		Integer maxScore = questionService.getNumberOfQuestions();
+		
+		model.addAttribute("rankings", rankings);
+		model.addAttribute("maxScore", maxScore);
+		return "rankings";
+	}
+	
+	@GetMapping("/questionStats/rankings")
+	public String getQuestionStats(HttpSession session, ModelMap model) {
+		
+		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
+		if (userIsAdmin == null || userIsAdmin.equals(Boolean.FALSE)) {
+			model.addAttribute("message", "Morate biti ulogovani da biste pristupili ovoj stranici.");
+			return "denied";
+		}
+		List<Question> questions = questionService.listAllOrderedByCorrectnes();
+		model.addAttribute("questions", questions);
+	return "questionrankings";
+	}
 }

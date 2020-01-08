@@ -4,16 +4,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Dobrodošli u kviz</title>
+<title>TP Kviz - Dobrodošli u kviz</title>
 </head>
 <body>
+	<div align="center"> nalog: ${sessionScope.username}</div>
+	<div align="center"> <a href="/logout"> logout </a></div>
 	<div align="center">
-	<p>Hello ${sessionScope.userFirstName}</p>
-	<p>Admin ${sessionScope.administrator ? 'Yes' : 'No'}</p>
+	<p>Dobrodošli ${sessionScope.userFirstName}</p>
 	</div>
 	<div align="center">
-	<form action="/showQuestion" method="get">
-		<input type="hidden" name = "qindex" value = "0"/> 
+	<form action="/resetAndStart" method="get">
+		<input type="hidden" name = "qIndex" value = "0"/> 
 		<input type="submit" value="Startuj kviz" />
 	</form>
 	</div>	 

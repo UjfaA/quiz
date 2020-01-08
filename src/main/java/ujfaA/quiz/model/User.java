@@ -1,6 +1,6 @@
 package ujfaA.quiz.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,17 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
-import ch.qos.logback.core.CoreConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name="USERS")
+@Table(name="users")
 @Getter@Setter@ToString
 public class User {
 	
@@ -36,10 +32,10 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastActive;
-//	@Transient
-//	private long score;
+//	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDateTime lastActive;
+//  not used
+//	private Integer score;
 	
 	@ManyToMany(mappedBy = "usersAnswered")
 	private Set<Question> answeredQuestions = new HashSet<Question>();
@@ -52,7 +48,7 @@ public class User {
 	}
 	
 	//convenience method for HTML
-	public int getScore() {
+	public Integer getScore() {
 		return correctlyAnsweredQuestions.size();
 	}
 	
@@ -61,7 +57,7 @@ public class User {
 		q.getUsersAnswered().add(this);
 	}
 	
-	public void removeAnsweredQuestion(Question q) {
+	public void removeFromAnsweredQuestion(Question q) {
 		answeredQuestions.remove(q);
 		q.getUsersAnswered().remove(this);
 	}
@@ -72,9 +68,21 @@ public class User {
 		q.getUsersAnsweredCorectly().add(this);
 	}
 	
-	public void removeAnsweredQuestionCorrectly(Question q) {
-		this.removeAnsweredQuestion(q);
+	public void removeFromAnsweredQuestionCorrectly(Question q) {
 		correctlyAnsweredQuestions.remove(q);
 		q.getUsersAnsweredCorectly().remove(this);
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if ( ! (other instanceof User))
+			return false;
+		User otherU = (User) other;
+		return this.username.equals(otherU.username);
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.username.hashCode();
 	}
 }

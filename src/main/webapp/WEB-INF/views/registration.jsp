@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>New user registration</title>
+<title>TP Kviz - registracija</title>
 </head>
 <body>
 	<div align="center">
@@ -58,5 +58,7 @@
 			</table>
 		</form:form>
 	</div>
+	<hr/>
+	<div align="center"> <a href="/"> Povratak</a></div>
 </body>
 </html>

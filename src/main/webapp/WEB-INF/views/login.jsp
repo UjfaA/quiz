@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login page</title>
+<title>TP Kviz - Login</title>
 </head>
 <body>
 	<div align="center">
@@ -16,7 +16,7 @@
 		<table cellpadding="1">
 		<tr>
 			<td><label for="username">Korisničko ime:</label></td>
-			<td><input type = "text" name = "username" id="username"/></td>
+			<td><input type = "text" name = "username" id="username" value="${requestScope.username}"/></td>
 		</tr>
 		<tr>
 			<td><label for= "pass">Lozinka:</label></td>
@@ -31,5 +31,7 @@
 		</table>
 		</form>
 	</div>
+	<hr/>
+<div align="center"> <a href="/"> Povratak </a></div>
 </body>
 </html>

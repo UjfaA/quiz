@@ -1,6 +1,6 @@
 package ujfaA.quiz.controller;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpSession;
 
@@ -26,36 +26,35 @@ public class UserController {
 	    model.addAttribute(new User());
 	    return "registration";
 	}
-	
-//  TODO: post/redirect/get design pattern ?	
+		
 	@PostMapping("/registration")
 	public String addNewUser(@ModelAttribute("user") 	User newUser,
 														ModelMap model,
 														HttpSession session) {
-		try {
-			User userInDb = userService.getUser(newUser.getUsername());			
-		} catch (Exception e) {
+		boolean usernameAvaible = userService.isUsernameAvaible(newUser.getUsername());
+		if(usernameAvaible) {
+			newUser = userService.save(newUser);
+			session.setAttribute("username", newUser.getUsername());
+			session.setAttribute("userFirstName", newUser.getFirstName());
+			session.setAttribute("administrator", newUser.isAdministrator());
+			return "redirect:/loginSuccess";
+		}
+		else {
 			model.addAttribute("user", newUser);
 			model.addAttribute("message", "Korisničko ime je zauzeto.\nProbajte drugo korisničko ime.");
 			return "registration";
 		}
-		newUser = userService.save(newUser);
-		session.setAttribute("userId", newUser.getId());
-		session.setAttribute("username", newUser.getUsername());
-		session.setAttribute("userFirstName", newUser.getFirstName());
-		session.setAttribute("administrator", newUser.isAdministrator());
-		return "redirect:/loginSuccess";
 	}
 	
 	@GetMapping("/login")
-	public String login(ModelMap model) {
+	public String login() {
 		return"login";
 	}
 	
 	@PostMapping("/login")
-	public String login(@RequestParam("username") String username,
-						@RequestParam("password") String password,
-						HttpSession session, ModelMap model) {
+	public String login( HttpSession session, ModelMap model,
+						@RequestParam("username") String username,
+						@RequestParam("password") String password) {
 		User user;
 		try {
 			user = userService.getUser(username);			
@@ -69,8 +68,6 @@ public class UserController {
 			model.addAttribute("message", "Pogrešna lozinka.");
 			return "login"; 
 		}
-		
-		session.setAttribute("userId", user.getId());
 		session.setAttribute("username", user.getUsername());
 		session.setAttribute("userFirstName", user.getFirstName());
 		session.setAttribute("administrator", user.isAdministrator());
@@ -81,11 +78,15 @@ public class UserController {
 	@GetMapping("/loginSuccess")
 	public String loginSuccess(HttpSession session, ModelMap model) {
 		
-		Long userId = (Long) session.getAttribute("userId");
-		if (userId == null) {
+		String username = (String) session.getAttribute("username");
+		if (username == null) {
 			model.addAttribute("message", "Morate biti ulogovani da biste pristupili ovoj stranici.");
 			return "denied";
 		}
+		
+		User user = userService.getUser(username);
+		user.setLastActive(LocalDateTime.now());
+		userService.save(user);
 		
 		Boolean userIsAdmin = (Boolean) session.getAttribute("administrator");
 		if (userIsAdmin.equals(Boolean.FALSE)) {

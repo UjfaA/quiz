@@ -7,11 +7,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Customer Manager</title>
+<title>TP Kviz - Registrovani korisnici</title>
 </head>
 <body>
+	<div align="center"> nalog: ${sessionScope.username}</div>
+	<div align="center"> <a href="/logout"> logout </a></div>
 	<div align="center">
-		<h3>Korisnici:</a></h3>
+		<h3>Korisnici:</h3>
     	<table border="1" cellpadding="5">
     		<thead>
     		<tr>
@@ -21,7 +23,7 @@
             	<th>email</th>
             	<th>Nalog</th>
             	<th>Admin</th>
-            	<th>Poslednja aktivnost</th>
+            	<th>Poslednji put ulogovan/a</th>
         	</tr>
     		</thead>
     		<tbody>
@@ -34,17 +36,12 @@
             		<td>${user.username}</td>
             		<td>${user.administrator ? 'Yes' : 'No'}</td>
             		<td>${user.lastActive}</td>
-            		 <!--
-            		 <td>
-                		<a href="/edit?id=${user.id}">Edit</a> &nbsp;&nbsp;&nbsp;
-                		<a href="/delete?id=${user.id}">Delete</a>
-            		</td>
-            		-->
         		</tr>
     		</c:forEach>
     		</tbody>
     	</table>
 	</div>
-
+	<hr/>
+	<div align="center"> <a href="/loginSuccess"> Povratak na početak </a></div>
 </body>
 </html>

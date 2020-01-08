@@ -7,10 +7,12 @@
     Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>Pregled pitanja</title>
+<title>TP Kviz -Pregled pitanja</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
+	<div align="center"> nalog: ${sessionScope.username}</div>
+	<div align="center"> <a href="/logout"> logout </a></div>
 <h2> &nbsp;</h2>
 <div align="center">
 	<form action="/questions/add" method="post" >
@@ -45,7 +47,7 @@
 			</tr>
 			</c:forEach>
 			<tr>
-				<td colspan="2" > 
+				<td align="center" colspan="2" > 
 					<form action="/questions/delete" method="post">
 					<input type="hidden"  name="id" value="${question.id}"/>
 					<input type="submit" value="Izbriši pitanje"/>
@@ -57,6 +59,8 @@
 		</table>
 		<h5> &nbsp;</h5>
 	</c:forEach>
-</div>	
+</div>
+<hr/>
+<div align="center"> <a href="/loginSuccess"> Povratak na početak </a></div>
 </body>
 </html>

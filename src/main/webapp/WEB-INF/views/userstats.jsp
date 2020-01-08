@@ -8,6 +8,8 @@
 <title>TP Kviz - statistika učesnika</title>
 </head>
 <body>
+	<div align="center"> nalog: ${sessionScope.username}</div>
+	<div align="center"> <a href="/logout"> logout </a></div>
 	<div align="center">
 		<h2 align="center"> Statistika učesnika </h2>
 		<form action="/userStats" method="get">
@@ -17,9 +19,9 @@
 				<td align="center">
 					<select name="selected">
 						<c:forEach items="${avaibleStats}" var="option" varStatus="loop">
-						<option  value="${loop.index}" ${previouslySelectedQstats eq option ? 'selected' : ''}>
+						<option style="max-width: 30"  value="${loop.index}" ${ loop.index eq requestScope.selected ? 'selected' : ''}>
 							<c:if test="${not loop.first}">
-        					Pitanje: &nbsp;
+        					${loop.index} :&nbsp;
     						</c:if>
 						 	${option} 
 						 </option>
@@ -29,7 +31,8 @@
 			 </tr>
 			 <tr>
 			 	<td align="left">
-			 		<input type="checkbox" name="answeredCorrectly" value="true" id="cbox"/>
+			 		<input type="checkbox" name="answeredCorrectly" value="true" id="cbox" 
+			 			${requestScope.checked ? 'checked': ''}/>
 			 		<label for="cbox">Prikaži samo one koji su odgovorili tačno.</label> 
 			 	</td>
 			 </tr>
@@ -40,17 +43,12 @@
 			 </tr>
 		</table>
 		</form>
-<!-- 		
-			<c:forEach items= "${avaibleStats}" var="option" varStatus="loop">
-				<input type="radio" name="chosenIndex" value="${loop.index}" id="R${loop.index}" ${loop.index eq chosenIndex?'checked':''}/> 
-				<label for="R${loop.index}"> "${option}"</label>
-			</c:forEach>
- -->
 	</div>
 	<hr/>
 	<div align="center">
 		<table>
 			<thead>
+				<tr><th>Korisnička imena: </th></tr>
 			</thead>
 			<tbody>
 			<c:forEach items="${usernames}" var="username">
@@ -59,5 +57,7 @@
 			</tbody>
 		</table>
 	</div>
+	<hr/>
+	<div align="center"> <a href="/loginSuccess"> Povratak na početak </a></div>
 </body>
 </html>
