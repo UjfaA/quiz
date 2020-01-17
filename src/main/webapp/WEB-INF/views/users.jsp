@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01
     Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -10,7 +11,7 @@
 <title>TP Kviz - Registrovani korisnici</title>
 </head>
 <body>
-	<div align="center"> nalog: ${sessionScope.username}</div>
+	<div align="center"> nalog: <sec:authentication property="principal.username"/></div>
 	<div align="center"> <a href="/logout"> logout </a></div>
 	<div align="center">
 		<h3>Korisnici:</h3>
@@ -42,6 +43,6 @@
     	</table>
 	</div>
 	<hr/>
-	<div align="center"> <a href="/loginSuccess"> Povratak na početak </a></div>
+	<div align="center"> <a href="/overview/"> Povratak </a></div>
 </body>
 </html>

@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>TP Kviz - registracija</title>
+<title>TP Kviz - Registracija</title>
 </head>
 <body>
 	<div align="center">
@@ -45,7 +45,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" align="right">
-					<input type="submit" value = "Register"/>
+					<input type="submit" value = "Registruj korisnika"/>
 					</td>
 				</tr>
 				<tr>
@@ -53,8 +53,6 @@
 					</td>
 				</tr>
 			</tbody>
-			<tfoot>
-			</tfoot>
 			</table>
 		</form:form>
 	</div>

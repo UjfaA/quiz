@@ -32,6 +32,6 @@
 		</form>
 	</div>
 	<hr/>
-<div align="center"> <a href="/"> Povratak </a></div>
+<div align="center"> <a href="/"> Početak </a></div>
 </body>
 </html>

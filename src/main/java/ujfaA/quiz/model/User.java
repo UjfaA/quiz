@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,16 +26,29 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
 	@Column(unique = true, nullable = false)
 	private String username;
+	
 	@Column(nullable = false)
 	private String password;
+	
+	@Transient
 	private Boolean administrator;
+	
 	private String firstName;
+	
 	private String lastName;
+	
+	@Column(unique = true, nullable = false)
 	private String email;
+
 //	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime lastActive;
+	
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Set<Role> roles;
+	
 //  not used
 //	private Integer score;
 	
@@ -43,9 +58,9 @@ public class User {
 	@ManyToMany(mappedBy = "usersAnsweredCorectly")
 	private Set<Question> correctlyAnsweredQuestions = new HashSet<Question>();
 	
-	public Boolean isAdministrator() {
-		return administrator;
-	}
+//	public Boolean isAdministrator() {
+//		return administrator;
+//	}
 	
 	//convenience method for HTML
 	public Integer getScore() {

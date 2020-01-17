@@ -38,7 +38,7 @@ public class QuizService {
 			user.addAnsweredQuestion(q);
 			user.removeFromAnsweredQuestionCorrectly(q);
 		}
-		userService.save(user);
+		userService.update(user);
 	}
 	
 	public List<String> getEndOfQuizMessages(String username, List<User> rankings) {
@@ -95,6 +95,7 @@ public class QuizService {
 	}
 
 // TODO revisit, (but no iterators! - ConcurrentModificationException)
+//TODO: test user.set/Correctly/AnsweredQuestions(new Set<Question>())
 	public void resetScore(String username) {
 		
 		User user = userService.getUser(username);
@@ -103,6 +104,6 @@ public class QuizService {
 			user.removeFromAnsweredQuestionCorrectly((Question) questions[i]);			
 			user.removeFromAnsweredQuestion((Question) questions[i]);
 		}
-		userService.save(user);
+		userService.update(user);
 	}
 }

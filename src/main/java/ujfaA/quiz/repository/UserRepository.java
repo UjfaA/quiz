@@ -14,6 +14,8 @@ import ujfaA.quiz.model.User;
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 	
 	public Optional<User> findByUsername(String username);
+	
+	public Boolean existsUserByUsername(String username);
 
 //	public Set<User> findByAnsweredQuestionsContains(Question q);
 	

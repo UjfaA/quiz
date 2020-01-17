@@ -1,18 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>TP Kviz - statistika učesnika</title>
+<title>TP Kviz - Statistika učesnika</title>
 </head>
 <body>
-	<div align="center"> nalog: ${sessionScope.username}</div>
+	<div align="center"> nalog: <sec:authentication property="principal.username"/></div>
 	<div align="center"> <a href="/logout"> logout </a></div>
 	<div align="center">
 		<h2 align="center"> Statistika učesnika </h2>
-		<form action="/userStats" method="get">
+		<form action="/overview/users/stats" method="get">
 		<table>
 			<tr><td align="center"> Prikaži korisnička imena svih učesnika koji su odgovorili na </td></tr>
 			<tr>
@@ -58,6 +59,6 @@
 		</table>
 	</div>
 	<hr/>
-	<div align="center"> <a href="/loginSuccess"> Povratak na početak </a></div>
+	<div align="center"> <a href="/overview/"> Povratak </a></div>
 </body>
 </html>
