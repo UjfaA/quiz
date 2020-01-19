@@ -10,7 +10,7 @@
 	<div>
 	<h2>Došlo je do greške</h2>
 	<h5>${errorMessage}</h5>
-	<p><a href="/loginSuccess"> početak</a></p>
+	<p><a href="/quiz"> početak</a></p>
 	</div>
 </body>
 </html>

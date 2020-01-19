@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,21 +32,21 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 	
-	@Transient
-	private Boolean administrator;
-	
-	private String firstName;
-	
-	private String lastName;
-	
 	@Column(unique = true, nullable = false)
 	private String email;
 
+	@Column(nullable = false)
+	private String role;
+	
+	@Transient
+	private boolean administrator;
+	
+	private String firstName;
+	
+	private String lastName;	
+
 //	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime lastActive;
-	
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private Set<Role> roles;
 	
 //  not used
 //	private Integer score;
@@ -58,11 +57,18 @@ public class User {
 	@ManyToMany(mappedBy = "usersAnsweredCorectly")
 	private Set<Question> correctlyAnsweredQuestions = new HashSet<Question>();
 	
-//	public Boolean isAdministrator() {
-//		return administrator;
-//	}
 	
-	//convenience method for HTML
+	// for Spring
+	public boolean getAdministrator() {
+		return administrator;
+	}
+	
+	// for readability
+	public boolean isAdministrator() {
+		return administrator;
+	}
+	
+	//convenience method
 	public Integer getScore() {
 		return correctlyAnsweredQuestions.size();
 	}

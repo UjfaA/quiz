@@ -35,7 +35,7 @@
             		<td>${user.lastName}</td>
             		<td>${user.email}</td>
             		<td>${user.username}</td>
-            		<td>${user.administrator ? 'Yes' : 'No'}</td>
+            		<td> <c:if test="${user.role eq 'ADMIN'}"> Admin </c:if> </td>
             		<td>${user.lastActive}</td>
         		</tr>
     		</c:forEach>

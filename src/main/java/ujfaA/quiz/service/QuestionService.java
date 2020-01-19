@@ -3,7 +3,6 @@ package ujfaA.quiz.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ujfaA.quiz.model.Question;
-import ujfaA.quiz.model.User;
 import ujfaA.quiz.repository.QuestionRepository;
 
 @Service
@@ -28,11 +26,11 @@ public class QuestionService {
 		questionRepo.findAll().forEach(list::add);
 		return list;
 	}
-/*	
-	public Optional<Question> getQuestionById(Long id) {
-		return questionRepo.findById(id);
+
+	public Question getQuestionByQuestionText(String questionText) {
+		return questionRepo.findByQuestionText(questionText);
 	}
-*/	
+	
 	public int getNumberOfQuestions() {
 		return (int) questionRepo.count();
 	}
@@ -60,13 +58,6 @@ public class QuestionService {
 	
 	public Collection<String> GetQuestionsText() {
 		return questionRepo.findAllQuestionTexts();
-	}
-	
-	public Set<User> getUsersAnswered(String questionText, boolean answeredCorrectly) {
-		if (answeredCorrectly)
-			return questionRepo.getUsersThatAnsweredQuestionCorrectly(questionText);
-		else
-			return questionRepo.getUsersThatAnsweredQuestion(questionText);
 	}
 	
 	public List<Question> listAllOrderedByCorrectnes() {

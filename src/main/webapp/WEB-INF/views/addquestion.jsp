@@ -19,7 +19,7 @@
 			<thead>
 				<tr>
 				<th></th>
-				<th colspan="2"> Novo pitanje: </th>
+				<th> <h3>Novo pitanje:</h3> </th>
 				</tr>
 			</thead>
 			<tbody>
@@ -41,11 +41,14 @@
 				<tr>
 					<td colspan="2" align="right"><input type="submit" value="Sačuvaj pitanje"/></td>
 				</tr>
+				<tr>
+					<td colspan="2" align="right">${message}</td>
+				</tr>
 			</tbody>
 			</table>
 		</form:form>
 	</div>
 	<hr/>
-<div align="center"> <a href="/overview/"> Povratak </a></div>
+<div align="center"> <a href="/overview/questions"> Povratak </a></div>
 </body>
 </html>

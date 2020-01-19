@@ -49,7 +49,7 @@
 			</c:forEach>
 			<tr>
 				<td align="center" colspan="2" > 
-					<form action="/questions/delete" method="post">
+					<form action="/overview/questions/delete" method="post">
 					<input type="hidden"  name="id" value="${question.id}"/>
 					<input type="submit" value="Izbriši pitanje"/>
 					</form>

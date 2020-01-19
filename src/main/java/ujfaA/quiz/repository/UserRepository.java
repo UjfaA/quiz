@@ -9,21 +9,30 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import ujfaA.quiz.model.Question;
 import ujfaA.quiz.model.User;
 
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 	
-	public Optional<User> findByUsername(String username);
-	
 	public Boolean existsUserByUsername(String username);
 
-//	public Set<User> findByAnsweredQuestionsContains(Question q);
+	public Optional<User> findByUsername(String username);
+
+	public Set<User> findByAnsweredQuestionsContains(Question question);
 	
-	@Query("SELECT u.username FROM User u where size(u.correctlyAnsweredQuestions) = ?1")
-	public Set<String> findAllUsernamesCorrectlyAnsweredQuestionsCountEquals(Integer qNumber);
+	public Set<User> findByCorrectlyAnsweredQuestionsContains(Question question);
+	
+	@Query("SELECT u.username FROM User u where :question member of u.answeredQuestions")
+	public Set<String> getUsernamesWhereAnsweredQuestionsContains(Question question);
+
+	@Query("SELECT u.username FROM User u where :question member of u.correctlyAnsweredQuestions")
+	public Set<String> getUsernamesWhereCorrectlyAnsweredQuestionsContains(Question question);
 	
 	@Query("SELECT u.username FROM User u where size(u.answeredQuestions) = ?1")
-	public Set<String> findAllUsenamesAnsweredQuestionsCountEquals(Integer number);
+	public Set<String> getUsenamesWhereAnsweredQuestionsCountEquals(Integer number);
+	
+	@Query("SELECT u.username FROM User u where size(u.correctlyAnsweredQuestions) = ?1")
+	public Set<String> getUsernamesWhereCorrectlyAnsweredQuestionsCountEquals(Integer qNumber);
 	
 	@Query("SELECT u FROM User u ORDER BY size(u.correctlyAnsweredQuestions) DESC")
 	public List<User> findAllOrderByCorrectlyAnsweredQuestions();

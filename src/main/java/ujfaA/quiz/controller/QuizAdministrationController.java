@@ -1,6 +1,7 @@
 package ujfaA.quiz.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ujfaA.quiz.model.Question;
 import ujfaA.quiz.model.User;
@@ -44,22 +46,26 @@ public class QuizAdministrationController {
 	}
 	
 	@GetMapping("/users/stats")
-	public String showStats(ModelMap model,
+	public String showStats( ModelMap model,
 					@RequestParam( name = "selected", defaultValue = "0") Integer selected,
 					@RequestParam( name = "answeredCorrectly", defaultValue = "false") Boolean answeredCorrectly) {
-
-// TODO: move decision branching from service to controller		
-		List<String> avaibleStats = this.getAvaibleStatsForUser();
-		Set<String> usernames = quizService.collectUsernames(avaibleStats, selected, answeredCorrectly);
 		
-		model.addAttribute("avaibleStats", avaibleStats);
-		model.addAttribute("checked", answeredCorrectly);
+		Set<String> usernames;
+		List<String> options = this.getAvaibleOptions();
+		
+		if (options.get(selected).equals("sva pitanja"))
+			usernames = quizService.getUsersThatAnsweredAll(answeredCorrectly);
+		else
+			usernames = quizService.getUsersThatAnsweredQuestion(options.get(selected), answeredCorrectly);
+		
+		model.addAttribute("options", options);
 		model.addAttribute("selected", selected);
+		model.addAttribute("checked", answeredCorrectly);
 		model.addAttribute("usernames", usernames);
 		return "userstats";
 	}
 	
-	private List<String> getAvaibleStatsForUser() {
+	private List<String> getAvaibleOptions() {
 		
 		List<String> avaibleStats = new ArrayList<String>();
 		avaibleStats.add("sva pitanja");
@@ -100,16 +106,28 @@ public class QuizAdministrationController {
 
 		session.setAttribute("previouslySelectedOption", numberOfAnswers);
 		model.addAttribute("numberOfAnswers", numberOfAnswers);
-		model.addAttribute("question", new Question());
+		if(model.getAttribute("question") == null)
+			model.addAttribute(new Question());
 		return "addquestion";
 	}
 	
 	@PostMapping("/questions/add")
-	public String saveQuestion(@ModelAttribute("question") Question question) {
+	public String saveQuestion(@ModelAttribute("question") Question question, RedirectAttributes redirectAttrs) {
+		
+		if (hasDuplicateAnswers(question)) {
+			redirectAttrs.addAttribute("numberOfAnswers", question.getAnswers().size());			
+			redirectAttrs.addFlashAttribute("message", "Identični odgovori nisu dozvoljeni.");
+			return"redirect:/overview/questions/add";
+		}
 		questionService.save(question);
 		return "redirect:/overview/questions";
 	}
 	
+	private boolean hasDuplicateAnswers(Question question) {
+		Set<String> set = new HashSet<String>(question.getAnswers());
+		return set.size() != question.getAnswers().size();
+	}
+
 	@PostMapping("/questions/delete")
 	public String deletequestion(@RequestParam("id") Long id) {
 		questionService.delete(id);

@@ -19,7 +19,7 @@
 			<tr>
 				<td align="center">
 					<select name="selected">
-						<c:forEach items="${avaibleStats}" var="option" varStatus="loop">
+						<c:forEach items="${options}" var="option" varStatus="loop">
 						<option style="max-width: 30"  value="${loop.index}" ${ loop.index eq requestScope.selected ? 'selected' : ''}>
 							<c:if test="${not loop.first}">
         					${loop.index} :&nbsp;

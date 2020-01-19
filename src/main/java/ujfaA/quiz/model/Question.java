@@ -37,20 +37,18 @@ public class Question{
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "QUESTIONS_ANSWERED_BY_USER",
 			joinColumns = @JoinColumn(name = "QUESTION_ID", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName="id")
-	)
+			inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName="id") )
 	private Set<User> usersAnswered = new HashSet<User>();
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "QUESTIONS_ANSWERED_CORRECTLY_BY_USER", 
 			joinColumns = @JoinColumn(name = "QUESTION_ID", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName="id")
-	)
+			inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName="id") )
 	private Set<User> usersAnsweredCorectly = new HashSet<User>();
 	
 	public Question() {
 	}
-	
+/*	
 	public void removeFromUsersAnswered(User u) {
 		this.getUsersAnswered().remove(u);
 		u.getAnsweredQuestions().remove(this);
@@ -60,10 +58,10 @@ public class Question{
 		this.getUsersAnsweredCorectly().remove(u);
 		u.getCorrectlyAnsweredQuestions().remove(this);
 	}
-	
+*/	
 	public double getCorrectnesstPercent() {
 		if (usersAnswered.size() == 0) 
-			return 0;
+			return 0.0;
 		else
 			return (usersAnsweredCorectly.size() * 1.0) / usersAnswered.size();
 	}

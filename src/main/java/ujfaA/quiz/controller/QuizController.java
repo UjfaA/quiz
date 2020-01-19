@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import ujfaA.quiz.model.Question;
 import ujfaA.quiz.model.User;
 import ujfaA.quiz.service.QuestionService;
 import ujfaA.quiz.service.QuizService;
@@ -46,11 +45,12 @@ public class QuizController {
 		
 	@PostMapping("/registration")
 	public String addNewUser( ModelMap model, @ModelAttribute("user") User newUser) {
+
+// TODO auto login when previously logged in  // Cannot perform login for 'admin2', already authenticated as 'user'
+//			request.login(newUser.getUsername(), newUser.getPassword());
 		
 		if( userService.usernameIsAvaible(newUser.getUsername()) ) {
 			newUser = userService.register(newUser);
-// TODO auto login when previously logged in  // Cannot perform login for 'admin2' already authenticated as 'user'
-//			request.login(newUser.getUsername(), newUser.getPassword());
 			return "redirect:/login";
 		}
 		else {
@@ -106,12 +106,9 @@ public class QuizController {
 								ModelMap model,
 								RedirectAttributes redirectAttr,
 								@RequestParam("qIndex") int qIndex,
-								@RequestParam(value ="checked", defaultValue = "") String[] checked) {
+								@RequestParam(value ="checked", defaultValue = "") String[] usersAnswers) {
 		
-// TODO move to questionService		
-		Question q = questionService.getQuestionByIndex(qIndex);
-		quizService.userAnswered(principal.getName(), q, checked);
-		
+		quizService.userAnswered(principal.getName(), qIndex, usersAnswers);
 		qIndex += 1;
 		if(qIndex < questionService.getNumberOfQuestions()) {
 			redirectAttr.addAttribute("qIndex", Integer.valueOf(qIndex));

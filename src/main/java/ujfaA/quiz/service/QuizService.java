@@ -26,18 +26,16 @@ public class QuizService {
 		return userService.getHighestRanked(5);	
 	}
 	
-	public void userAnswered(String username, Question q, String[] answers) {
+	public void userAnswered(String username, int questionIndex, String[] UsersAnswers) {
 		
+		Question q = questionService.getQuestionByIndex(questionIndex);
 		User user = userService.getUser(username);
-		if (answers.length == 1
-			&& answers[0].contentEquals(q.getCorrectAnswer()) ) 
-			{
+		
+		if (UsersAnswers.length == 1 && UsersAnswers[0].contentEquals(q.getCorrectAnswer()) ) 		
 			user.addAnsweredQuestionCorrectly(q);
-			}
-		else {
+		else
 			user.addAnsweredQuestion(q);
-			user.removeFromAnsweredQuestionCorrectly(q);
-		}
+		
 		userService.update(user);
 	}
 	
@@ -69,33 +67,22 @@ public class QuizService {
 		return questionService.getNumberOfQuestions();
 	}
 
-	public Set<String> collectUsernames(List<String> avaibleStats, int selected, boolean answeredCorrectly) {	
-		
-		if (selected == 0)  // all questions
-			return getUsersThatAnsweredAll(answeredCorrectly);
-		else 
-			return getUsersThatAnsweredQuestion(avaibleStats.get(selected), answeredCorrectly);
-	}
-	
 	public Set<String> getUsersThatAnsweredAll(boolean answeredCorrectly) {
 		
-		Integer qNumber = questionService.getNumberOfQuestions();
-		if(qNumber == 0)
+		Integer qCount = questionService.getNumberOfQuestions();
+		if(qCount == 0)
 			return new HashSet<String>();
 		else
-			return userService.getUsersAnsweredNumOfQuestions(qNumber, answeredCorrectly);		
+			return userService.getUsersAnsweredNumOfQuestions(qCount, answeredCorrectly);		
 	}
 
-	private Set<String> getUsersThatAnsweredQuestion(String questionText, boolean answeredCorrectly) {
-		
-		Set<User> users = questionService.getUsersAnswered(questionText, answeredCorrectly);
-		Set<String> usernames = new HashSet<String>();
-		users.forEach(user -> usernames.add(user.getUsername()));
-		return usernames;
+	public Set<String> getUsersThatAnsweredQuestion(String questionText, boolean answeredCorrectly) {		
+		Question q = questionService.getQuestionByQuestionText(questionText);
+		return userService.getUsersAnswered( q, answeredCorrectly);
 	}
 
 // TODO revisit, (but no iterators! - ConcurrentModificationException)
-//TODO: test user.set/Correctly/AnsweredQuestions(new Set<Question>())
+// TODO test user.set/Correctly/AnsweredQuestions(new Set<Question>())
 	public void resetScore(String username) {
 		
 		User user = userService.getUser(username);
