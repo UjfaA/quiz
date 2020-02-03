@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title> TP kviz - pitanje </title>
+</head>
+<body>
+	<div align="center">
+	 <form th:action="@{/submitAnswer}" method="post">
+	 	<input type="hidden" name="qIndex" th:value="${qIndex}"/>
+	 	<h5 th:text="${'pitanje ' + (qIndex + 1) + ' od ' + numberOfQuestions}"></h5>
+	 	<table>
+	  		<thead>
+	  			<tr><th colspan="2" align="center" th:text="${question.questionText}"></th></tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr th:each = "answer,iteration : ${question.answers}">
+	  				<td align="right" > <input type="checkbox" name="answers"  th:value="${answer}" th:id ="ans + ${iteration.index}" /> </td>
+	  				<td align="left"> <label th:for="ans + ${iteration.index}" th:text="${answer}"> </label></td>
+	  			</tr>
+	  			<tr><td colspan="2" align="right"> <input type="submit" value="Potvrdi odgovor" /><td></tr>
+	  		</tbody>
+	  	</table>
+	 </form>
+	</div>
+	<div align="center" style="margin: 5px;">
+	 <form th:action="@{/skipQuestion}" method="get">
+		<input type="hidden" name="qIndex" th:value="${qIndex}"/>
+		<input type="submit" value="Preskoči pitanje"/>
+	 </form>
+	 </div>
+	<hr>
+	<div align="center"> <a th:href="@{/abandon}"> Napusti Kviz </a></div>
+
+</body>
+</html>

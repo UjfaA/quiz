@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,10 +29,15 @@ public class Question{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Column(unique = true, nullable = false)
 	private String questionText;
+	
+	@Column(nullable = false)
 	private String correctAnswer;
+	
 	@Transient
 	private int correctAnswerIndex;
+	
 	private ArrayList<String> answers;
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -48,17 +54,7 @@ public class Question{
 	
 	public Question() {
 	}
-/*	
-	public void removeFromUsersAnswered(User u) {
-		this.getUsersAnswered().remove(u);
-		u.getAnsweredQuestions().remove(this);
-	}
-	
-	public void removeFromUsersAnsweredCorectly(User u) {
-		this.getUsersAnsweredCorectly().remove(u);
-		u.getCorrectlyAnsweredQuestions().remove(this);
-	}
-*/	
+
 	public double getCorrectnesstPercent() {
 		if (usersAnswered.size() == 0) 
 			return 0.0;

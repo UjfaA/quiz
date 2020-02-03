@@ -1,8 +1,8 @@
 package ujfaA.quiz.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -56,7 +56,7 @@ public class QuestionService {
 		questionRepo.deleteById(id);
 	}
 	
-	public Collection<String> GetQuestionsText() {
+	public Set<String> GetQuestionsText() {
 		return questionRepo.findAllQuestionTexts();
 	}
 	

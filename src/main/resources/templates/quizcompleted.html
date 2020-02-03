@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title> TP kviz - Rezultat </title>
+</head>
+<body>
+	<div align="center"> nalog: <span sec:authentication ="name"></span> </div>
+	<div align="center"> <a th:href="@{/logout}"> izloguj se </a></div>
+	<div align="center" th:each= "message : ${messages}">
+		<h3 th:text="${message}"></h3>
+	</div>
+	<hr/>
+	<div align="center">
+	<h4> RANG LISTA: </h4>
+	<table>
+	<thead>
+		<tr>
+			<th> Ime i prezime</th>
+			<th> Rezultat </th>
+		</tr>
+	</thead>
+	<tbody>	
+		<tr th:each= "user : ${rankings}">
+			<td th:text ="${user.firstName + ' ' + user.lastName}"></td>
+			<td align="center" th:text="${user.score}"></td>
+		</tr> 
+	</tbody>
+	</table>
+	</div>
+	<hr/>
+	<div align="center"> <a th:href="@{/quiz}"> Povratak na početak </a></div>
+</body>
+</html>

@@ -3,13 +3,10 @@ package ujfaA.quiz.controller;
 import java.security.Principal;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,14 +15,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ujfaA.quiz.model.User;
 import ujfaA.quiz.service.QuestionService;
 import ujfaA.quiz.service.QuizService;
-import ujfaA.quiz.service.UserService;
 
 
 @Controller
 public class QuizController {
 	
-	@Autowired
-	private UserService userService;
 	@Autowired
 	private QuestionService questionService;
 	@Autowired
@@ -37,48 +31,13 @@ public class QuizController {
 		return "index";
 	}
 	
-	@GetMapping("/registration")
-	public String registration(ModelMap model) {
-	    model.addAttribute(new User());
-	    return "registration";
-	}
-		
-	@PostMapping("/registration")
-	public String addNewUser( ModelMap model, @ModelAttribute("user") User newUser) {
-
-// TODO auto login when previously logged in  // Cannot perform login for 'admin2', already authenticated as 'user'
-//			request.login(newUser.getUsername(), newUser.getPassword());
-		
-		if( userService.usernameIsAvaible(newUser.getUsername()) ) {
-			newUser = userService.register(newUser);
-			return "redirect:/login";
-		}
-		else {
-			model.addAttribute("user", newUser);
-			model.addAttribute("message", "Korisničko ime je zauzeto.\nProbajte drugo korisničko ime.");
-			return "registration";
-		}
-	}
-	
-	@GetMapping("/login")
-	public String login( ModelMap model, @RequestParam(defaultValue = "false") boolean error,
-										@RequestParam(required = false) String message) {
-		if (error == true)
-			message = "Pogrešno korisničko ime i/ili lozinka.";
-		model.addAttribute("message", message);
-		return"login";
-	}
-
-	
 	@GetMapping("/quiz")
 	public String start() {
 		return "quizstart";
 	}
 	
 	@GetMapping("/resetAndStart")
-	public String resetAndStart( Principal principal,
-								 RedirectAttributes redirectAttr,
-								 @RequestParam("qIndex") int qIndex) {
+	public String resetAndStart( Principal principal, RedirectAttributes redirectAttr) {
 
 		if (questionService.getNumberOfQuestions() == 0) {
 			redirectAttr.addAttribute("errorMessage",
@@ -87,13 +46,12 @@ public class QuizController {
 		}
 		
 		quizService.resetScore(principal.getName());
-		redirectAttr.addAttribute("qIndex", Integer.valueOf(qIndex));
+		redirectAttr.addAttribute("qIndex", 0);
 		return "redirect:/showQuestion";
 	}
 	
 	@GetMapping("/showQuestion")
-	public String showquestion( ModelMap model,
-								@RequestParam("qIndex") int qIndex) {
+	public String showquestion( @RequestParam("qIndex") int qIndex, ModelMap model)  {
 
 		model.addAttribute("qIndex", qIndex);
 		model.addAttribute("numberOfQuestions", questionService.getNumberOfQuestions());
@@ -101,17 +59,17 @@ public class QuizController {
 		return "showquestion";
 	}
 	
-	@PostMapping("/submit")
+	@PostMapping("/submitAnswer")
 	public String submitAnswer( Principal principal,
 								ModelMap model,
 								RedirectAttributes redirectAttr,
 								@RequestParam("qIndex") int qIndex,
-								@RequestParam(value ="checked", defaultValue = "") String[] usersAnswers) {
+								@RequestParam(value ="answers", defaultValue = "") String[] answers) {
 		
-		quizService.userAnswered(principal.getName(), qIndex, usersAnswers);
+		quizService.userAnswered(principal.getName(), qIndex, answers);
 		qIndex += 1;
 		if(qIndex < questionService.getNumberOfQuestions()) {
-			redirectAttr.addAttribute("qIndex", Integer.valueOf(qIndex));
+			redirectAttr.addAttribute("qIndex", qIndex);
 			return "redirect:/showQuestion";
 		}
 		else
@@ -146,13 +104,6 @@ public class QuizController {
 	public String abandon(Principal principal) {
 		quizService.resetScore(principal.getName());
 		return "redirect:/quiz";
-	}
-	
-// TODO  Spring Security logout
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/";
 	}
 
 	@GetMapping("/epage")

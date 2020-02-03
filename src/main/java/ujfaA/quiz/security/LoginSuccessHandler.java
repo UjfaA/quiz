@@ -1,4 +1,4 @@
-package ujfaA.quiz;
+package ujfaA.quiz.security;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
