@@ -2,43 +2,52 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title> TP kviz - registracija </title>
+<title>TP kviz - registracija</title>
 </head>
 <body>
 	<div align="center">
-	<form action="#" th:action="@{/registration}" th:object="${user}" method="post">
-		<table>
-		<tr>
-			<td><label for="firstName">Ime:</label></td>
-			<td><input th:field = "*{firstName}" autofocus/></td>
-		</tr>
-		<tr>
-			<td><label for="lastName">Prezime</label></td>
-			<td><input th:field = "*{lastName}"/></td>
-		</tr>
-		<tr>
-			<td><label for="username">Korisničko ime</label></td>
-			<td><input th:field="*{username}" required /></td>
-		</tr>
-		<tr>
-			<td><label for="password">Lozinka</label></td>
-			<td><input type="password" th:field="*{password}" required /></td>
-		</tr>
-		<tr>
-			<td><label for="email">Email</label></td>
-			<td><input type="email" th:field="*{email}"/></td>
-		</tr>
-		<tr>
-			<td><label for="administrator">Administrator</label></td>
-			<td><input type="checkbox" th:field="*{administrator}"/></td>
-		</tr>
-		<tr>
-			<td colspan="2" align="right">
-			<input type="submit" value="Registruj korisnika">
-			</td>
-		</tr>
-		</table>
-	</form>
+		<form action="#" th:action="@{/registration}" th:object="${user}"
+			method="post">
+			<table>
+				<tr>
+					<td colspan="2" align="center">
+						<h3>Registrujte novi nalog</h3>
+					</td>
+				</tr>
+				<tr>
+					<td><label th:for="firstName">Ime:</label></td>
+					<td><input th:field="*{firstName}" autofocus /></td>
+				</tr>
+				<tr>
+					<td><label th:for="lastName">Prezime</label></td>
+					<td><input th:field="*{lastName}" /></td>
+				</tr>
+				<tr>
+					<td><label th:for="username">Korisničko ime</label></td>
+					<td><input th:field="*{username}" required /></td>
+				</tr>
+				<tr>
+					<td><label th:for="password">Lozinka</label></td>
+					<td><input type="password" th:field="*{password}" required /></td>
+				</tr>
+				<tr>
+					<td><label th:for="email">Email</label></td>
+					<td><input type="email" th:field="*{email}" /></td>
+				</tr>
+				<tr>
+					<td><label th:for="administrator">Administrator</label></td>
+					<td><input type="checkbox" th:field="*{administrator}" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="right"><input type="submit"
+						value="Registruj korisnika"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<hr />
+	<div align="center">
+		<a th:href="@{/}"> Početak </a>
 	</div>
 </body>
 </html>

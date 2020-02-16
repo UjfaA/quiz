@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title> TP kviz - Učesnici - Statistika </title>
+</head>
+<body>
+	<div align="center"> nalog: <span sec:authentication ="name"></span> </div>
+	<div align="center"> <a th:href="@{/logout}"> izloguj se </a></div>
+	<div align="center">
+		<h2 align="center"> Statistika učesnika </h2>
+		<form action="/overview/users/stats" method="get">
+		<table>
+			<tr><td align="center"> Prikaži korisnička imena svih učesnika koji su odgovorili na pitanje: </td></tr>
+			<tr><td align="center">
+				<select  name="selection">
+						<option th:each="question : ${questions}"
+								th:value="${question}"
+								th:text="${question}"
+								th:selected="${selection EQ question}">
+						</option>
+						<option th:value="all"
+								th:text="'Sva pitanja'"
+								th:selected="${selection EQ 'all'}">
+						</option>
+				</select>
+			</td></tr>
+			<tr><td align="center">
+				<input type="checkbox"
+				 		name="answeredCorrectly"
+				 		id="chbox"
+				 		th:checked="${checked}" />
+				<label th:for="chbox">Prikaži samo one koji su odgovorili tačno.</label>
+			</td></tr>
+			<tr><td align="center">
+				<input style="margin-top: 15px;" 
+					 type="submit" value="Osveži prikaz" />
+			</td></tr>
+		</table>
+		</form>
+	</div>
+	<div align="center" style="margin-top: 30px;">
+		<h4	th:each="username : ${usernames}"
+			th:text="${username}">
+		</h4>
+	</div>
+	<hr/>
+	<div align="center"> <a th:href="@{/overview/}"> Povratak </a></div>
+</body>
+</html>

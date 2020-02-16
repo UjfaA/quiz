@@ -16,5 +16,32 @@
 			<input type="submit" value="Startuj kviz" />
 		</form>
 	</div>
+	<hr/>
+	<div align="center">
+	<table>
+		<tr><td>
+		<form action="/overview/users/details" method="get">
+			<input type="submit" value="Pregled korisničkih naloga"/>
+		</form></td></tr>
+		<tr><td>
+		<form action="/overview/users/stats" method="get">
+			<input type="submit" value="Pregled statistike kviza"/>
+		-- ispis učesnika koji su odgovorili(tačno) na određeno pitanje (sva pitanja) 
+		</form></td></tr>
+		<tr><td>
+		<form action="/overview/users/rankings" method="get">
+			<input type="submit" value="Pregled uspešnosti učesnika"/>
+		</form></td></tr>
+		<tr><td>
+		<form action="/overview/questions" method="get">
+			<input type="submit" value="Pregled pitanja kviza"/>
+		 -- dodavanje i brisanje pitanja
+		</form></td></tr>
+		<tr><td>
+		<form action="/overview/questions/rankings" method="get">
+			<input type="submit" value="Pregled pitanja po procentu tačnih odgovora"/>
+		</form></td></tr>
+	</table>
+	</div>
 </body>
 </html>

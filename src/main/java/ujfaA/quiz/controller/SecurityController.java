@@ -17,6 +17,7 @@ public class SecurityController {
 	@Autowired
 	private UserService userService;
 	
+	
 	@GetMapping("/registration")
 	public String registration(ModelMap model) {
 	    model.addAttribute(new User());

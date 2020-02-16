@@ -2,11 +2,14 @@ package ujfaA.quiz.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +41,8 @@ public class Question{
 	@Transient
 	private int correctAnswerIndex;
 	
-	private ArrayList<String> answers;
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> answers = new ArrayList<String>();
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "QUESTIONS_ANSWERED_BY_USER",
@@ -50,16 +54,17 @@ public class Question{
 	@JoinTable(name = "QUESTIONS_ANSWERED_CORRECTLY_BY_USER", 
 			joinColumns = @JoinColumn(name = "QUESTION_ID", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName="id") )
-	private Set<User> usersAnsweredCorectly = new HashSet<User>();
+	private Set<User> usersAnsweredCorrectly = new HashSet<User>();
+	
 	
 	public Question() {
 	}
 
 	public double getCorrectnesstPercent() {
-		if (usersAnswered.size() == 0) 
-			return 0.0;
+		if (usersAnswered.isEmpty()) 
+			return -1.0;
 		else
-			return (usersAnsweredCorectly.size() * 1.0) / usersAnswered.size();
+			return (usersAnsweredCorrectly.size() * 1.0) / usersAnswered.size();
 	}
 	
 	@Override

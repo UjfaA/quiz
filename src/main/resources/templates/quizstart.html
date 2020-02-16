@@ -16,6 +16,9 @@
 			<input type="submit" value="Startuj kviz" />
 		</form>
 	</div>
-	
+	 <div align="center" style="margin-top: 15px;" 
+	 		sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{/overview/}">Administratorska početna stranica</a>.
+    </div>	
 </body>
 </html>

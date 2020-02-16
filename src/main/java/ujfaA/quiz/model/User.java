@@ -15,11 +15,10 @@ import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name="users")
-@Getter@Setter@ToString
+@Getter@Setter
 public class User {
 	
 	@Id
@@ -45,17 +44,14 @@ public class User {
 	
 	private String lastName;	
 
-//	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime lastActive;
-	
-//  not used
-//	private Integer score;
 	
 	@ManyToMany(mappedBy = "usersAnswered")
 	private Set<Question> answeredQuestions = new HashSet<Question>();
 	
-	@ManyToMany(mappedBy = "usersAnsweredCorectly")
+	@ManyToMany(mappedBy = "usersAnsweredCorrectly")
 	private Set<Question> correctlyAnsweredQuestions = new HashSet<Question>();
+	
 	
 	
 	// for Spring
@@ -86,12 +82,12 @@ public class User {
 	public void addAnsweredQuestionCorrectly(Question q) {
 		this.addAnsweredQuestion(q);
 		correctlyAnsweredQuestions.add(q);
-		q.getUsersAnsweredCorectly().add(this);
+		q.getUsersAnsweredCorrectly().add(this);
 	}
 	
 	public void removeFromAnsweredQuestionCorrectly(Question q) {
 		correctlyAnsweredQuestions.remove(q);
-		q.getUsersAnsweredCorectly().remove(this);
+		q.getUsersAnsweredCorrectly().remove(this);
 	}
 	
 	@Override

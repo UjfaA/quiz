@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title> TP kviz - Učesnici - Detalji </title>
+</head>
+<body>
+	<div align="center"> nalog: <span sec:authentication ="name"></span> </div>
+	<div align="center"> <a th:href="@{/logout}"> izloguj se </a></div>
+	<div align="center">
+		<h2 align="center"> Korisnički nalozi </h2>
+		<table border="1" cellpadding="5">
+    		<thead>
+    		<tr>
+            	<th>ID</th>
+            	<th>Ime</th>
+            	<th>Prezime</th>
+            	<th>email</th>
+            	<th>Nalog</th>
+            	<th>Admin</th>
+            	<th>Poslednji put ulogovan/a</th>
+        	</tr>
+    		</thead>
+    		<tbody>
+    			<tr th:each=" user: ${usersList}">
+            		<td th:text="${user.id}" ></td>
+            		<td th:text="${user.firstName}" ></td>
+            		<td th:text="${user.lastName}" ></td>
+            		<td th:text="${user.email}" ></td>
+            		<td th:text="${user.username}" ></td>
+            		<td th:text="${user.role eq 'ADMIN' ? 'Admin' : ' '}" ></td>
+            		<td th:text="${user.lastActive}" ></td>
+        		</tr>
+    		</tbody>
+    	</table>
+	
+	</div>
+	<hr/>
+	<div align="center"> <a th:href="@{/overview/}"> Povratak </a></div>
+</body>
+</html>

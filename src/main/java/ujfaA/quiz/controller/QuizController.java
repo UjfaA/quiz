@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,7 +25,7 @@ public class QuizController {
 	private QuizService quizService;
 	
 	
-	@RequestMapping("/")
+	@GetMapping("/")
 	public String home() {
 		return "index";
 	}
@@ -42,7 +41,7 @@ public class QuizController {
 		if (questionService.getNumberOfQuestions() == 0) {
 			redirectAttr.addAttribute("errorMessage",
 				"Kviz ne sadrži ni jedno pitanje. Potrebno je da administrator konstruiše bar jedno pitanje.");
-			return "redirect:/epage";
+			return "redirect:/errpage";
 		}
 		
 		quizService.resetScore(principal.getName());
@@ -93,7 +92,7 @@ public class QuizController {
 		
 		qIndex += 1;
 		if(qIndex < questionService.getNumberOfQuestions()) {
-			redirectAttr.addAttribute("qIndex", Integer.valueOf(qIndex));
+			redirectAttr.addAttribute("qIndex", qIndex);
 			return "redirect:/showQuestion";
 		}
 		else
@@ -106,10 +105,10 @@ public class QuizController {
 		return "redirect:/quiz";
 	}
 
-	@GetMapping("/epage")
+	@GetMapping("/errpage")
 	public String showError(ModelMap model,
 							@RequestParam(name = "errorMessage", required = false) String errorMessage) {
 		model.addAttribute("errorMessage", errorMessage);
-		return "epage";
+		return "errpage";
 	}
 }

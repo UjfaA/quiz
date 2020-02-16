@@ -81,15 +81,12 @@ public class QuizService {
 		return userService.getUsersAnswered( q, answeredCorrectly);
 	}
 
-// TODO revisit, (but no iterators! - ConcurrentModificationException)
-// TODO test user.set/Correctly/AnsweredQuestions(new Set<Question>())
 	public void resetScore(String username) {
-		
+
 		User user = userService.getUser(username);
-		Object[] questions = user.getAnsweredQuestions().toArray();
-		for (int i = 0; i < questions.length; i++) {
-			user.removeFromAnsweredQuestionCorrectly((Question) questions[i]);			
-			user.removeFromAnsweredQuestion((Question) questions[i]);
+		for(Question q : user.getAnsweredQuestions()) {
+			q.getUsersAnswered().remove(user);
+			q.getUsersAnsweredCorrectly().remove(user);
 		}
 		userService.update(user);
 	}

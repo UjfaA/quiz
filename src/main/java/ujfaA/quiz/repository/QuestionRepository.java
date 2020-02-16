@@ -18,12 +18,5 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 	
 	@Query("SELECT q.questionText FROM Question q")
 	public Set<String> findAllQuestionTexts();
-	
-//	Following functionality has been moved to UserRepository
-	
-//	@Query("SELECT q.usersAnswered FROM Question q WHERE q.questionText = ?1")
-//	public Set<User> getUsersThatAnsweredQuestion(String questionText);
-	
-//	@Query("SELECT q.usersAnsweredCorectly FROM Question q WHERE q.questionText = ?1")
-//	public Set<User> getUsersThatAnsweredQuestionCorrectly(String questionText);
+
 }

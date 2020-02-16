@@ -1,11 +1,8 @@
 package ujfaA.quiz.controller;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,30 +44,21 @@ public class QuizAdministrationController {
 	
 	@GetMapping("/users/stats")
 	public String showStats( ModelMap model,
-					@RequestParam( name = "selected", defaultValue = "0") Integer selected,
+					@RequestParam( name = "selection", defaultValue = "all") String questionText,
 					@RequestParam( name = "answeredCorrectly", defaultValue = "false") Boolean answeredCorrectly) {
 		
 		Set<String> usernames;
-		List<String> options = this.getAvaibleOptions();
 		
-		if (options.get(selected).equals("sva pitanja"))
+		if (questionText.equals("all"))
 			usernames = quizService.getUsersThatAnsweredAll(answeredCorrectly);
 		else
-			usernames = quizService.getUsersThatAnsweredQuestion(options.get(selected), answeredCorrectly);
+			usernames = quizService.getUsersThatAnsweredQuestion(questionText, answeredCorrectly);
 		
-		model.addAttribute("options", options);
-		model.addAttribute("selected", selected);
+		model.addAttribute("questions", questionService.GetQuestionsText());
+		model.addAttribute("selection", questionText);
 		model.addAttribute("checked", answeredCorrectly);
 		model.addAttribute("usernames", usernames);
 		return "userstats";
-	}
-	
-	private List<String> getAvaibleOptions() {
-		
-		List<String> avaibleStats = new ArrayList<String>();
-		avaibleStats.add("sva pitanja");
-		avaibleStats.addAll(questionService.GetQuestionsText());
-		return avaibleStats;
 	}
 	
 	@GetMapping("users/rankings")
@@ -81,36 +69,32 @@ public class QuizAdministrationController {
 		
 		model.addAttribute("rankings", rankings);
 		model.addAttribute("maxScore", maxScore);
-		return "rankings";
+		return "userrankings";
 	}
 	
 	@GetMapping("/questions")
 	public String getQuestions(ModelMap model) {
-		model.addAttribute("options", this.getOptions());
 		model.addAttribute("questions", questionService.listAll());
 		return "questions";
 	}
 	
-	private List<Integer> getOptions() {
-		int MAXIMUM_NUMBER_OF_ANSWERS_FOR_A_QUESTIONS = 10; // iz nekog config fajla na pr. ?
-		List<Integer> list = new ArrayList<Integer>();
-		for ( int i = 1; i <= MAXIMUM_NUMBER_OF_ANSWERS_FOR_A_QUESTIONS; i++ ) {
-			list.add(i);
-		}
-		return list;
-	}
-	
 	@GetMapping("/questions/add")
-	public String newQuestion(HttpSession session, ModelMap model,
-					@RequestParam("numberOfAnswers") Integer numberOfAnswers) {
+	public String newQuestion( @RequestParam(name = "numberOfAnswers", defaultValue = "3") int numberOfAnswers,
+						//		@ModelAttribute("question") Question question,
+								ModelMap model) {
 
-		session.setAttribute("previouslySelectedOption", numberOfAnswers);
+//		if (question == null) question = new Question();
+		
+		final int MAX_ANSWERS = 5;
+		if (numberOfAnswers > MAX_ANSWERS) numberOfAnswers = MAX_ANSWERS;
+		
+
+		model.addAttribute(new Question());
 		model.addAttribute("numberOfAnswers", numberOfAnswers);
-		if(model.getAttribute("question") == null)
-			model.addAttribute(new Question());
+		model.addAttribute("MAX_ANSWERS", MAX_ANSWERS);
 		return "addquestion";
 	}
-	
+
 	@PostMapping("/questions/add")
 	public String saveQuestion(@ModelAttribute("question") Question question, RedirectAttributes redirectAttrs) {
 		

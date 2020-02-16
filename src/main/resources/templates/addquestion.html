@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title> TP kviz - Pitanja - Novo pitanje </title>
+</head>
+<body>
+	<div align="center"> nalog: <span sec:authentication ="name"></span> </div>
+	<div align="center"> <a th:href="@{/logout}"> izloguj se </a></div>
+	<div align="center" style="margin-top: 10px;">
+		<form th:action="@{/overview/questions/add}" method="get">
+			<table>
+				<tr>
+				<td><p th:text= "'Broj odgovora: '"> </p></td>
+				<td>
+					<select name="numberOfAnswers">
+  						<option th:each="n : ${#numbers.sequence(1, MAX_ANSWERS)}" 
+  									th:value="${n}" th:text="${n}" th:selected="${n EQ numberOfAnswers}"></option>
+					</select>
+					<input type="submit" value="Osveži prikaz" />
+				</td>
+			<tr>
+		</table>
+		</form>
+	</div>
+	<div align="center">
+		<form th:action="@{/overview/questions/add}" th:object="${question}" method="post">
+			<table>
+				<thead>
+					<tr>
+						<th colspan="2" align="center">
+							<label th:for="questionText" th:text="'Tekst Pitanja: '" ></label>
+						</th><th>
+							<input type="text" th:field="*{questionText}" />
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="n : ${#numbers.sequence(1, numberOfAnswers)}">
+						<td align="right">
+							<input type="radio" th:field="*{correctAnswerIndex}" th:value="${n-1}"/>
+						</td>
+						<td align="right">
+							<label th:for="${'ans' + n}" th:text="${n +'. odgovor: '}" ></label>
+						</td><td>
+							<input type="text" th:field="*{answers}" th:id="${'ans' + n}" />
+						</td>
+					</tr><tr>
+						<td align="center">&#8593; </td>
+						<td colspan="2" align="left">Označite tačan odgovor</td>
+					</tr><tr>
+						<td></td>
+						<td colspan="2" align="right">
+							<input type="submit" value="Kreiraj pitanje" />
+						</td>
+					</tr>
+					<tr><td colspan="3">
+						<p th:text = "${message}" ></p>
+					</td></tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+	<hr/>
+	<div align="center"> <a th:href="@{/overview/questions/}"> Povratak </a></div>
+</body>
+</html>

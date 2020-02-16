@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title> TP kviz - Greška </title>
+</head>
+<body>
+	<div>
+	<h2>Došlo je do greške</h2>
+	<h5 th:text="${errorMessage}"></h5>
+	<p><a th:href="@{/quiz}"> početak</a></p>
+	</div>
+</body>
+</html>

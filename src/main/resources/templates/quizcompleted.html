@@ -9,11 +9,10 @@
 	<div align="center"> nalog: <span sec:authentication ="name"></span> </div>
 	<div align="center"> <a th:href="@{/logout}"> izloguj se </a></div>
 	<div align="center" th:each= "message : ${messages}">
-		<h3 th:text="${message}"></h3>
+		<h4 th:text="${message}"></h4>
 	</div>
-	<hr/>
 	<div align="center">
-	<h4> RANG LISTA: </h4>
+	<h3> RANG LISTA: </h3>
 	<table>
 	<thead>
 		<tr>

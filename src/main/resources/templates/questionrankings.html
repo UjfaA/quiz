@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title> TP kviz - Pitanja - Po procentu tačnih odgovora </title>
+</head>
+<body>
+<div align="center"> nalog: <span sec:authentication ="name"></span> </div>
+	<div align="center"> <a th:href="@{/logout}"> izloguj se </a></div>
+	<div align="center">
+		<table cellpadding = "5" >
+		<thead>
+			<tr>
+			<th>  Pitanje </th>
+			<th>  Odgovorili tačno  </th>
+			<th>  Odgovorili  </th>
+			<th>  Procenat tačnih odgovora</th>
+			</tr> 
+		</thead>
+		<tbody>
+		<tr th:each="question : ${questions}">
+			<td width="50" th:text="${question.questionText}">Tekst pitanja</td>
+			<td align="center" th:text="${#lists.size(question.usersAnsweredCorrectly)}">Tačno odgovorili</td>
+			<td align="center" th:text="${#lists.size(question.usersAnswered)}">Odgovorili</td>
+			<td align="center" th:text="${#lists.size(question.usersAnswered) > 0
+											? #numbers.formatPercent( (#lists.size(question.usersAnsweredCorrectly) * 1.0) div #lists.size(question.usersAnswered), 1, 0 )
+											: 'Nijedan učesnik nije odgovorio'}">
+		</tr> 
+		</tbody>
+	</table>
+	</div>
+	<hr/>
+	<div align="center"> <a th:href="@{/overview/}"> Povratak </a></div>
+</body>
+</html>

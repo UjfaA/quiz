@@ -1,0 +1,1 @@
+Development of this projec is continued here: https://github.com/UjfaA/SpringQuiz

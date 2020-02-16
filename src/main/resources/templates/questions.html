@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title> TP kviz - Pitanja </title>
+</head>
+<body>
+	<div align="center"> nalog: <span sec:authentication ="name"></span> </div>
+	<div align="center"> <a th:href="@{/logout}"> izloguj se </a></div>
+	<div align="center" style="margin-top: 10px;">
+		<form th:action="@{/overview/questions/add}" method="get">
+			<input type="submit" value="Dodaj novo pitanje"/>
+		</form>
+	</div>
+	<hr/>
+	<h4 align="center"> Pitanja: </h4>
+	<div align="center"  th:each="question : ${questions}">
+		<table border="1">
+		<thead>
+			<tr><th colspan="2" align="center" th:text="${question.questionText}"> </th></tr>
+		</thead>
+		<tbody>
+			<tr th:each="answer : ${question.answers}">
+				<td align="right" th:text="${(answer EQ question.correctAnswer) ? '&#10003;' :''}"></td>
+				<td align="center" th:text="${answer}"></td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2" > 
+					<form th:action="@{/overview/questions/delete}" method="post">
+						<input type="hidden"  name="id" th:value="${question.id}"/>
+						<input type="submit" value="Izbriši pitanje"/>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+		</table>
+		<h5> &nbsp;</h5>
+	</div>
+	<hr/>
+	<div align="center"> <a th:href="@{/overview/}"> Povratak </a></div>
+</body>
+</html>
