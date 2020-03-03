@@ -1,1 +1,1 @@
-Development of this projec is continued here: https://github.com/UjfaA/SpringQuiz
+Development of this project is continued here: https://github.com/UjfaA/SpringQuiz
